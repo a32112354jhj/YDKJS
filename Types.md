@@ -1,9 +1,9 @@
-#型別
+# 型別
 
-###JavaScript中有無型別?
+### JavaScript中有無型別?
 
 
-###內建行別
+### 內建行別
 * null
 * undefined
 * boolean
