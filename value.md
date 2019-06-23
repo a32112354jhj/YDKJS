@@ -36,8 +36,7 @@ var a = [ ];
 a["13"] = 42;
 a.length; // 14
 ```
-
-
+* * * 
 ##類陣列
 slice
 ```js
@@ -101,7 +100,7 @@ b; // ["!","o","O","f"]
 ```
 另一種解決方式（將字串轉成陣列，操作完在回程字串）
 ```JS
-var c = a
+var c = a
 // split `a` into an array of characters
 .split( "" )
 // reverse the array of characters
@@ -110,6 +109,7 @@ b; // ["!","o","O","f"]
 .join( "" );
 c; // "oof"
 ```
+* * *
 ### 數字
 非常大或非常小的number會以指數形式輸出，與toExponential()方法的輸出格式相同
 ```js
@@ -163,6 +163,7 @@ a.toPrecision( 6 ); // "42.5900"
 0b11110011; // binary for: 243
 0B11110011; // ditto
 ```
+* * *
 ###小的十進位值
 ```js
 0.1 + 0.2 === 0.3; // false
@@ -214,7 +215,7 @@ Math.abs( num ) <= Number.MAX_SAFE_INTEGER;
 };
 }
 ```
-
+* * *
 ### 32位元整數
 ###特殊值
 #### 非值的值
@@ -229,3 +230,50 @@ Math.abs( num ) <= Number.MAX_SAFE_INTEGER;
 var a = 42;
 console.log( void a, a ); // undefined 42
 ```
+確保一個運算式沒有結果值時可使用
+
+#### 特殊數字
+##### 非數字的數字
+NaN (not a number)，但他的型別還是number
+例如:
+```js
+var a = 2 / "foo"; // NaN
+typeof a === "number"; // true
+```
+不可直接用NaN做比較，與null和undefined不同
+```js
+var a = 2 / "foo";
+a == NaN; // false
+a === NaN; // false
+```
+
+NaN的判斷方式，使用isNaN()
+```js
+var a = 2 / "foo";
+isNaN( a ); // true
+```
+NaN的bug
+```js
+var a = 2 / "foo";
+var b = "foo";
+a; // NaN
+b; // "foo"
+window.isNaN( a ); // true
+window.isNaN( b ); // true -- ouch!
+```
+ES6的替代方法Number.isNaN(..)
+```js
+if (!Number.isNaN) {
+Number.isNaN = function(n) {
+return (
+typeof n === "number" &&
+window.isNaN( n )
+);
+};
+}
+var a = 2 / "foo";
+var b = "foo";
+Number.isNaN( a ); // true
+Number.isNaN( b ); // false -- phew!
+```
+
