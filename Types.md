@@ -189,4 +189,3 @@ var val = helper();
 }
 ```
 
-ts
