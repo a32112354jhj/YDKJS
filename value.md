@@ -1,6 +1,6 @@
 # 值（Values）
 
-##陣列
+## 陣列
 ```js
 var a = [ ];
 a.length; // 0
@@ -37,7 +37,7 @@ a["13"] = 42;
 a.length; // 14
 ```
 * * * 
-##類陣列
+## 類陣列
 slice
 ```js
 function foo() {
@@ -54,7 +54,7 @@ var arr = Array.from( arguments );
 ...
 ```
 
-###字串
+### 字串
 ```js
 var a = "foo";
 var b = ["f","o","o"];
@@ -164,7 +164,7 @@ a.toPrecision( 6 ); // "42.5900"
 0B11110011; // ditto
 ```
 * * *
-###小的十進位值
+### 小的十進位值
 ```js
 0.1 + 0.2 === 0.3; // false
 ```
@@ -217,7 +217,7 @@ Math.abs( num ) <= Number.MAX_SAFE_INTEGER;
 ```
 * * *
 ### 32位元整數
-###特殊值
+### 特殊值
 #### 非值的值
 >* null
 >* undefined
@@ -277,3 +277,8 @@ Number.isNaN( a ); // true
 Number.isNaN( b ); // false -- phew!
 ```
 
+#### 無限
+```js
+var a = 1 / 0; // Infinity
+var b = -1 / 0; // -Infinity
+```
