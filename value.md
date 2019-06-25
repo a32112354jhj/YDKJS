@@ -276,9 +276,175 @@ var b = "foo";
 Number.isNaN( a ); // true
 Number.isNaN( b ); // false -- phew!
 ```
-
+***
 #### 無限
 ```js
 var a = 1 / 0; // Infinity
 var b = -1 / 0; // -Infinity
+```
+> 只要溢位成Infinity就無法回頭了
+> Infinity / Infinity 結果會是 NaN
+> 一個有限的Number/Infinity 結果會是 0
+ 
+***
+
+#### 零
+> Js中提供了一半的零與負零(-0)
+ 
+```js
+var a = 0 / -3; // -0
+var b = 0 * -3; // -0
+```
+加減法中沒有-0的狀況，舊瀏覽器-0可能還是會被顯示為0。
+
+`若字串化一個負0值會得到一個"0"，JSON也有同樣情況`
+
+```js
+var a = 0 / -3;
+// (some browser) consoles at least get it right
+a; // -0
+// but the spec insists on lying to you!
+a.toString(); // "0"
+a + ""; // "0"
+String( a ); // "0"
+// strangely, even JSON gets in on the deception
+JSON.stringify( a ); // "0"
+```
+若反過來從string轉Number
+```js
++"-0"; // -0
+Number( "-0" ); // -0
+JSON.parse( "-0" ); // -0
+```
+
+`在比較運算子上-0與0也都視為相同`
+```js
+var a = 0;
+var b = 0 / -3;
+a == b; // true
+-0 == 0; // true
+a === b; // true
+-0 === 0; // true
+0 > -0; // false
+a > b; // false
+```
+
+```js
+function isNegZero(n) {
+n = Number( n );
+return (n === 0) && (1 / n === -Infinity);
+}
+isNegZero( -0 ); // true
+isNegZero( 0 / -3 ); // true
+isNegZero( 0 ); // false
+```
+***
+#### 特殊相等性
+ES6的`Object.is()`可以用來測試兩個值是否絕對相等
+```js
+var a = 2 / "foo";
+var b = -3 * 0;
+Object.is( a, NaN ); // true
+Object.is( b, -0 ); // true
+Object.is( b, 0 ); // false
+```
+es6之前的作法
+```js
+if (!Object.is) {
+Object.is = function(v1, v2) {
+// test for `-0`
+if (v1 === 0 && v2 === 0) {
+return 1 / v1 === 1 / v2;
+}
+// test for `NaN`
+if (v1 !== v1) {
+return v2 !== v2;
+}
+// everything else
+return v1 === v2;
+};
+}
+```
+
+***
+### 值 vs 參考
+
+```js
+var a = 2;
+var b = a; //b是a值的一份拷貝
+b++;
+a; // 2
+b; // 3
+var c = [1,2,3];
+var d = c; //d是指向共有值[1,2,3]的一個參考
+d.push( 4 );
+c; // [1,2,3,4]
+d; // [1,2,3,4]
+```
+>* 簡單的值都是藉由值的拷貝來指定或傳遞的:`null ,
+undefined , string , number , boolean , symbol(ES6)`
+>* 復合值object(包括陣列)與function都會在指定或傳遞時建立參考的一份拷貝
+
+參考指向的是值的本身，而非變數，所以無法使用一個參考來變更另一個參考的東西
+
+```js
+var a = [1,2,3];
+var b = a;
+a; // [1,2,3]
+b; // [1,2,3]
+// later
+b = [4,5,6];
+a; // [1,2,3]
+b; // [4,5,6]
+```
+
+```js
+function foo(x) {
+x.push( 4 );
+x; // [1,2,3,4]
+// later
+x = [4,5,6];
+x.push( 7 );
+x; // [4,5,6,7]
+}
+var a = [1,2,3];
+foo( a );
+a; // [1,2,3,4] not [4,5,6,7]
+```
+`沒辦法使用x變更a所指的東西，只能修改x及a公同指向的那個共有值內容。若要修改陣列裡的東西不能新建立一個陣列，而是要直接修改現有陣列的值`
+```js
+function foo(x) {
+x.push( 4 );
+x; // [1,2,3,4]
+// later
+x.length = 0; // empty existing array in-place
+x.push( 4, 5, 6, 7 );
+x; // [4,5,6,7]
+}
+var a = [1,2,3];
+foo( a );
+a; // [4,5,6,7] not [1,2,3,4]
+```
+
+想要傳入純量基型值，並讓其值可被更新(類似參考那樣)，可以將該值包裹在另一個能夠以參考的拷貝傳遞的複合值中:
+```js
+function foo(wrapper) {
+wrapper.a = 42;
+}
+var obj = {
+a: 2
+};
+foo( obj );
+obj.a; // 42
+```
+
+```js
+function foo(x) {
+x = x + 1;
+x; // 3
+}
+var a = 2;
+var b = new Number( a ); // or equivalently `Object(a)`
+foo( b );
+console.log( b ); // 2, not 3
 ```

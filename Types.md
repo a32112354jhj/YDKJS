@@ -1,8 +1,5 @@
 # 型別
 
-### JavaScript中有無型別?
-
-
 ### 內建行別
 * null
 * undefined
@@ -32,6 +29,8 @@ var a = null;
 (!a && typeof a === "object"); // true
 ```
 
+* * *
+
 #### Numbers
 ```js
 typeof 37 === 'number';
@@ -44,6 +43,18 @@ typeof Number('1') === 'number'; // Number tries to parse things into numbers
 
 typeof 42n === 'bigint';
 ```
+* * *
+
+#### Strings
+```js
+typeof '' === 'string';
+typeof 'bla' === 'string';
+typeof `template literal` === 'string';
+typeof '1' === 'string'; // note that a number within a string is still typeof string
+typeof (typeof 1) === 'string'; // typeof always returns a string
+typeof String(1) === 'string'; // String converts anything into a string, safer than toString
+```
+* * *
 
 #### Strings
 ```js
@@ -55,15 +66,6 @@ typeof (typeof 1) === 'string'; // typeof always returns a string
 typeof String(1) === 'string'; // String converts anything into a string, safer than toString
 ```
 
-#### Strings
-```js
-typeof '' === 'string';
-typeof 'bla' === 'string';
-typeof `template literal` === 'string';
-typeof '1' === 'string'; // note that a number within a string is still typeof string
-typeof (typeof 1) === 'string'; // typeof always returns a string
-typeof String(1) === 'string'; // String converts anything into a string, safer than toString
-```
 
 #### Booleans
 ```js
@@ -111,14 +113,16 @@ typeof function() {} === 'function';
 typeof class C {} === 'function';
 typeof Math.sin === 'function';
 ```
-###型別的值
+* * *
+### 型別的值
 ```js
 var a = 42;
 typeof a; // "number"
 a = true;
 typeof a; // "boolean"
 ```
-###undefined(未定義) vs "undeclared"(未宣告)
+* * *
+### undefined(未定義) vs "undeclared"(未宣告)
 ```js
 var a;
 typeof a;
@@ -142,7 +146,7 @@ typeof a; // "undefined"
 typeof b; // "undefined"
 ```
 
-###typeof Undeclared
+### typeof Undeclared
 ```js
 // oops, this would throw an error!
 if (DEBUG) {
