@@ -41,19 +41,9 @@ typeof Infinity === 'number';
 typeof NaN === 'number'; // Despite being "Not-A-Number"
 typeof Number('1') === 'number'; // Number tries to parse things into numbers
 
-typeof 42n === 'bigint';
+typeof 42n === 'bigint'; //任意精度表示整数
 ```
-* * *
-
-#### Strings
-```js
-typeof '' === 'string';
-typeof 'bla' === 'string';
-typeof `template literal` === 'string';
-typeof '1' === 'string'; // note that a number within a string is still typeof string
-typeof (typeof 1) === 'string'; // typeof always returns a string
-typeof String(1) === 'string'; // String converts anything into a string, safer than toString
-```
+bigint:https://zhuanlan.zhihu.com/p/36330307
 * * *
 
 #### Strings
@@ -147,12 +137,13 @@ typeof b; // "undefined"
 ```
 
 ### typeof Undeclared
+這個安全防護是個實用的特色，可用來檢查變數是否宣告
 ```js
-// oops, this would throw an error!
+// 錯錯錯
 if (DEBUG) {
 console.log( "Debugging is starting" );
 }
-// this is a safe existence check
+// 這是一個安全檢查
 if (typeof DEBUG !== "undefined") {
 console.log( "Debugging is starting" );
 }
@@ -164,7 +155,7 @@ if (typeof atob === "undefined") {
 atob = function() { /*..*/ };
 }
 ```
-不使用typeof方式對全域變數做檢查
+不使用typeof方式對全域變數做檢查的方式
 ```js
 if (window.DEBUG) {
 // ..
@@ -173,7 +164,7 @@ if (!window.atob) {
 // ..
 }
 ```
-
+範例:
 ```js
 function doSomethingCool() {
 var helper =
@@ -183,7 +174,7 @@ function() { /*.. default feature ..*/ };
 var val = helper();
 // ..
 ```
-依存性注入
+依存性注入的方式:
 ```js
 function doSomethingCool(FeatureXYZ) {
 var helper = FeatureXYZ ||
